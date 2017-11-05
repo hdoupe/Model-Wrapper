@@ -1,0 +1,7 @@
+name: aws_setup
+channels:
+- conda-forge
+- ospc
+- defaults
+dependencies:
+- awscli
