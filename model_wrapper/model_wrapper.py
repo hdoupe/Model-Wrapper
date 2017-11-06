@@ -4,29 +4,37 @@ import time
 import argparse
 
 
-def proc_lite(cmd, logfile=None):
+def proc_lite(cmd, logfile=None, wait=True):
     """
     Run commandline instructions
     TODO: add logging
     """
     print("running", cmd)
     proc = sp.Popen([cmd], shell=True)
+    if wait is False:
+        return None
     proc.wait()
     assert proc.poll() == 0
 
 
-def put(pem, ip, logfile, local, rmt, aws_pref='ubuntu'):
+def put(pem, ip, logfile, local, rmt, aws_pref='ubuntu', wait=True):
     """
     Use scp to copy local file to node
     """
-    proc_lite('scp -i {} {} {}@{}:{}'.format(pem, os.path.abspath(local), aws_pref, ip, rmt), logfile)
+    proc_lite(
+        'scp -i {} {} {}@{}:{}'.format(pem, os.path.abspath(local),
+                                       aws_pref, ip, rmt),
+        logfile,
+        wait=wait
+    )
 
 
-def run(pem, ip, logfile, cmd, aws_pref='ubuntu'):
+def run(pem, ip, logfile, cmd, aws_pref='ubuntu', wait=True):
     """
     ssh into node and run cmd
     """
-    proc_lite('ssh -i {} {}@{} "{}"'.format(pem, aws_pref, ip, cmd), logfile)
+    proc_lite('ssh -i {} {}@{} "{}"'.format(pem, aws_pref, ip, cmd), logfile,
+              wait=wait)
 
 
 def get_repo(handle, repo, branch, remote, logfile):
@@ -65,7 +73,7 @@ def wrap_model(handle, repo, branch, remote, logfile, pem, ip):
 
     # run model according to run_model.sh
     put(pem, ip, logfile, "./run_model.sh", rmt_dir)
-    run(pem, ip, logfile, "./run_model.sh")
+    run(pem, ip, logfile, "./run_model.sh", wait=False)
 
 
 if __name__ == '__main__':
