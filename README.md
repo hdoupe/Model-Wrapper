@@ -23,7 +23,7 @@ python model_wrapper.py \
     --repo OG-USA \
     --branch reg_dev \
     --remote origin \
-    --logfile log.txt \
+    --logfile log.out \
     --pem path/to/pemfile.pem \
     --ip NODE_IP_ADDRESS
 ```
