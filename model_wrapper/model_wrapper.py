@@ -73,7 +73,8 @@ def wrap_model(handle, repo, branch, remote, logfile, pem, ip):
 
     # run model according to run_model.sh
     put(pem, ip, logfile, "./run_model.sh", rmt_dir)
-    run(pem, ip, logfile, "./run_model.sh", wait=False)
+    run(pem, ip, logfile, "nohup ./run_model.sh &> {}".format(logfile),
+        wait=False)
 
 
 if __name__ == '__main__':
